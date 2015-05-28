@@ -26,6 +26,20 @@ Type dzinflognorm(Type x, Type meanlog, Type encounter_prob, Type sdlog, int giv
   if(give_log) return log(joint_prob); else return joint_prob;
 }
 
+// dzinflognorm
+template<class Type>
+Type dzinfgamma(Type x, Type mean, Type encounter_prob, Type cv, int give_log=false){
+  Type pos_prob;
+  Type joint_prob;
+  if(x==0){
+    joint_prob = 1.0 - encounter_prob;
+  }else{
+    pos_prob = dgamma( log(x), meanlog, sdlog, false) / x;
+    joint_prob = encounter_prob * pos_prob;
+  } 
+  if(give_log) return log(joint_prob); else return joint_prob;
+}
+
 // Main function
 template<class Type>
 Type objective_function<Type>::operator() ()
