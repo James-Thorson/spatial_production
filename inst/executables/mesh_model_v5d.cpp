@@ -199,8 +199,8 @@ Type objective_function<Type>::operator() ()
     }
     // Density-dependent function
     for(int r=0; r<n_r; r++){
-      if(Options_vec(1)==0) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + log(km2_r(r)) + Omega_g(r) - beta*log( upred_rt(r,t)/km2_r(r) )) );
-      if(Options_vec(1)==1) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + log(km2_r(r)) + Omega_g(r) - beta*upred_rt(r,t)/km2_r(r)) );
+      if(Options_vec(1)==0) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + Omega_g(r) - beta*log( upred_rt(r,t)/km2_r(r) )) );
+      if(Options_vec(1)==1) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + Omega_g(r) - beta*upred_rt(r,t)/km2_r(r)) );
     }
     for(int g=n_r; g<n_g; g++) ln_uhat_gt(g,t) = 0.0;
   }
