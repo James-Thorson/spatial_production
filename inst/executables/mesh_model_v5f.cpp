@@ -154,7 +154,7 @@ Type objective_function<Type>::operator() ()
     Identity_sparse.setIdentity();
     Mdiv_sparse.setIdentity();
   }
-  if( Options_vec(0)==1 | Options_vec(0)==2 ){
+  if( Options_vec(0)!=0 ){
     M_sparse = mvec(0)*M1 + mvec(1)*M2 + mvec(2)*M3 + mvec(3)*M4;
     Identity_sparse.setIdentity();
     Mdiv_sparse = M_sparse / Type(n_tdiv) + Identity_sparse; // Euler approximation
