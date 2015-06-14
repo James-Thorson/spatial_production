@@ -27,7 +27,7 @@ Type dzinflognorm(Type x, Type meanlog, Type encounter_prob, Type sdlog, int giv
   if(x==0){
     joint_prob = 1.0 - encounter_prob;
   }else{
-    pos_prob = dnorm( log(x), meanlog, sdlog, false) / x;
+    pos_prob = dnorm( log(x), meanlog, sdlog, false ) / x;
     joint_prob = encounter_prob * pos_prob;
   } 
   if(give_log) return log(joint_prob); else return joint_prob;
@@ -277,8 +277,8 @@ Type objective_function<Type>::operator() ()
   }
 
   // Priors on biological parameters
-  if( !isNA(bio_priors(0,2)) ) NLL_c(4) -= dnorm( ln_biovec_z(0), bio_priors(0,2), bio_priors(0,3), true ); // M
-  if( !isNA(bio_priors(1,2)) ) NLL_c(4) -= dnorm( ln_biovec_z(1), bio_priors(1,2), bio_priors(1,3), true ); // M
+  if( !isNA(bio_priors(0,2)) ) NLL_c(4) -= dnorm( exp(ln_biovec_z(0)), bio_priors(0,2), bio_priors(0,3), true ); // M
+  if( !isNA(bio_priors(1,2)) ) NLL_c(4) -= dnorm( exp(ln_biovec_z(1)), bio_priors(1,2), bio_priors(1,3), true ); // M
   
   // Calculate OFL
   for(int r=0; r<n_r; r++){
