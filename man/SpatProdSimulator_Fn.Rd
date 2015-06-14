@@ -2,7 +2,7 @@
 \alias{SpatProdSimulator_Fn}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Function to simulate data from a population following a spatial surplus production process
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~

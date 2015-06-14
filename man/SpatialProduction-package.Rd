@@ -3,8 +3,7 @@
 \alias{SpatialProduction}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+Package to implement spatial surplus production model including individual movement
 }
 \description{
 More about what it does (maybe more than one line)
