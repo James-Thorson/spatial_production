@@ -193,51 +193,53 @@ Type objective_function<Type>::operator() ()
   catchpred_rt.setZero();
   array<Type> u_rt(n_r,n_t);
   array<Type> OFL_rt(n_r,n_t);
-  array<Type> upred_rt(n_r,n_t);
+  array<Type> upred_rt(n_r,n_t); 
   // Track estimates and predictions of effort (dimensions n_gmrf x n_t, i.e., padded with zeros)
   array<Type> ln_uhat_gt(n_g,n_t);
 
+  // Estimated density and catches
+  for(int t=0; t<n_t; t++){  
+    for(int r=0; r<n_r; r++){
+      // Book-keeping
+      u_rt(r,t) = exp( ln_u_gt(r,t) );
+      catchpred_rt(r,t) = u_rt(r,t) * (1-exp(-1 * effortdens_rt(r,t) * F_t(t)));
+    }
+    // Calculate predicted total catch
+    catchpred_t(t) = catchpred_rt.col(t).sum();
+  }
+  
   // Predict dynamics of state-vector
-    // Survey is prior to survey in a given year
-    // i.e., effort and catch in year t control change from u(t-1) to u(t)
-    // Sequence: density(t) -> Survey -> catch -> movement -> production -> density(t+1)
+    // Survey is prior to effort in a given year
+    // i.e., effort and catch in year t control change from u(t) to u(t+1)
+    // Sequence: density(t) -> Survey(t) -> catch(t) -> movement -> production -> Process error(t) -> density(t+1)
   // First year
+    // Assumes effortdens_rt(r,0) is equal to equilibrium effort
+    // This implies that upred(r,0) ~= upred(r,1) for all r
+  // Approximate initial equilibrium density
   for(int r=0; r<n_r; r++){
-    // Book-keeping
-    u_rt(r,0) = exp( ln_u_gt(r,0) );
     // Approximation to expected density
     if(Options_vec(1)==0) upred_rt(r,0) = km2_r(r) * exp( logmeanu0 + Omega_g(r)/beta );
     if(Options_vec(1)==1) upred_rt(r,0) = km2_r(r) * (exp(logmeanu0) + Omega_g(r))/beta;
-    // fishing mortality and catch
-    catchpred_rt(r,0) = upred_rt(r,0) * (1-exp(-1 * effortdens_rt(r,0) * F_t(0)));
+    // Survival
     upred_rt(r,0) = upred_rt(r,0) * exp(-1 * effortdens_rt(r,0) * F_t(0));
   }  
   // Movement during initialization (Euler approximation)
   for(int tdev=0; tdev<n_tdiv; tdev++){
     upred_rt.col(0) = Mdiv_sparse * upred_rt.col(0).matrix();
   }
-  // Check that it density is positive for all triangles
+  // Check that it density is positive for all triangles (necessary for Ricker dynamics)
   for(int r=0; r<n_r; r++){
     ln_uhat_gt(r,0) = log( posfun(upred_rt(r,0), Type(1e-10), pos_penalty) );
   }
   // Fill out empty slots
   for(int g=n_r; g<n_g; g++) ln_uhat_gt(g,0) = 0.0;
-  // Calculate predicted total catch
-  catchpred_t(0) = catchpred_rt.col(0).sum();
-  // Later years
+  
+  // Later years -- Calculate upred(r,t) given u_rt(r,t-1)
   for(int t=1; t<n_t; t++){
-    // Book-keeping
+    // Survival
     for(int r=0; r<n_r; r++){
-      u_rt(r,t) = exp( ln_u_gt(r,t) );
-      upred_rt(r,t) = u_rt(r,t-1);
+      upred_rt(r,t) = u_rt(r,t-1) * exp(-1 * effortdens_rt(r,t-1) * F_t(t-1));
     }
-    // Fishing mortality and catch
-    for(int r=0; r<n_r; r++){
-      catchpred_rt(r,t) = upred_rt(r,t) * (1-exp(-1 * effortdens_rt(r,t) * F_t(t)));
-      upred_rt(r,t) = upred_rt(r,t) * exp(-1 * effortdens_rt(r,t) * F_t(t));
-    }
-    // Calculate predicted total catch
-    catchpred_t(t) = catchpred_rt.col(t).sum();
     // Movement (Euler approximation)
     for(int tdev=0; tdev<n_tdiv; tdev++){
       upred_rt.col(t) = Mdiv_sparse * upred_rt.col(t).matrix();
@@ -247,6 +249,7 @@ Type objective_function<Type>::operator() ()
       if(Options_vec(1)==0) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + Omega_g(r) - beta*log( upred_rt(r,t)/km2_r(r) )) );
       if(Options_vec(1)==1) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + Omega_g(r) - beta*upred_rt(r,t)/km2_r(r)) );
     }
+    // Fill out empty slots
     for(int g=n_r; g<n_g; g++) ln_uhat_gt(g,t) = 0.0;
   }
   
