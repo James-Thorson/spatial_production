@@ -212,10 +212,9 @@ Type objective_function<Type>::operator() ()
     // Survey is prior to effort in a given year
     // i.e., effort and catch in year t control change from u(t) to u(t+1)
     // Sequence: density(t) -> Survey(t) -> catch(t) -> movement -> production -> Process error(t) -> density(t+1)
-  // First year
+  // First year -- Approximate equilibrium upred(r,0)
     // Assumes effortdens_rt(r,0) is equal to equilibrium effort
     // This implies that upred(r,0) ~= upred(r,1) for all r
-  // Approximate initial equilibrium density
   for(int r=0; r<n_r; r++){
     // Approximation to expected density
     if(Options_vec(1)==0) upred_rt(r,0) = km2_r(r) * exp( logmeanu0 + Omega_g(r)/beta );
