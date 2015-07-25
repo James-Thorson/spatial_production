@@ -64,7 +64,7 @@ MakeInput_Fn = function( Version, Options_vec, DF, n_r, n_g, n_t, n_tdiv, MoveLi
       Obj = MakeADFun( data=Data, parameters=Params, map=Map, random=Random, inner.control=list(maxit=2500)) #, inner.method="Nelder-Mead"
       Report = Obj$report()
       M = matpow( Report$Mdiv_sparse, Data$n_tdiv )
-      residprob = mean( diag(M) )
+      residprob = mean( diag(as.matrix(M)) )
       print( paste0("mvec=c(",paste(round(Report[["mvec"]],3),collapse=","),") residprob=",round(residprob,3)) )
       if( outputtype=="objective" ) Return = abs(residprob-residprob_params[[1]])
       if( outputtype=="log_mvec" ) Return = Params[["log_mvec"]]
