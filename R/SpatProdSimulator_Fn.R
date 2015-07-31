@@ -17,7 +17,7 @@ SpatProdSimulator_Fn = function( MoveMat, SD_omega=1, SD_epsilon=1, SD_effort=1,
   # Simulate density for each triangle
   # Gompertz: u(t+1) = u(t) * exp( alpha - beta*log(u(t)) )
   # Moran-Ricker: u(t+1) = u(t) * exp( alpha - beta*u(t) )
-  catch_rt = upred_rt = u_rt = Epsilon_rt = matrix(NA, ncol=n_t+n_years_burnin, nrow=n_r)
+  catch_rt = upred_rt = u_rt = Epsilon_rt = matrix(NA, ncol=n_t, nrow=n_r)
   Omega_r = RFsimulate(model=RF_omega, x=loc_r[,1], y=loc_r[,2])@data[,1] - SD_omega^2/2 
   for(t in 1:n_t){
     Epsilon_rt[,t] = RFsimulate(model=RF_epsilon, x=loc_r[,1], y=loc_r[,2])@data[,1]
