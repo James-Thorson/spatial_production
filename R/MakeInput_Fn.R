@@ -71,7 +71,7 @@ MakeInput_Fn = function( Version, Options_vec, DF, n_r, n_g, n_t, n_tdiv, MoveLi
       return( Return )
     }
     #residprob_fn( log_mvec=log(0.2), residprob_params=Target_Residency_Prob, log_mvec_parameterization=Options_vec[["Movement_parameterization"]])
-    Opt = optimize( f=residprob_fn, interval=log(c(0.01,1)), residprob_params=Target_Residency_Prob, log_mvec_parameterization=Options_vec[["Movement_parameterization"]] )
+    Opt = optimize( f=residprob_fn, interval=log(c(0.01,5)), residprob_params=Target_Residency_Prob, log_mvec_parameterization=Options_vec[["Movement_parameterization"]] )
     Params[["log_mvec"]] = residprob_fn( log_mvec=Opt$minimum, outputtype="log_mvec", residprob_params=Target_Residency_Prob, log_mvec_parameterization=Options_vec[["Movement_parameterization"]])
   }
 
