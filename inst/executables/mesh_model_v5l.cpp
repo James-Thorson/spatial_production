@@ -81,6 +81,7 @@ Type objective_function<Type>::operator() ()
   // Slot 2: what data type (0=Poisson, 1=delta-lognormal)
   // Slot 3: what transform for occupancy prob (0=logistic, 1=asympotic-negative-exponential)
   // Slot 4: Parameterization for east-north-west-south movement log_mvec: 0=Cardinal directions(0=east,1=north,2=west,3=south); 1=Relative(0=east,1=north-relative-to-east,2=west-relative-to-est,3=south-relative-to-east)
+  // Slot 5: Parameterization for east-north-west-south movement log_mvec: 0=Cardinal directions(0=east,1=north,2=west,3=south); 1=Relative(0=east,1=north-relative-to-east,2=west-relative-to-est,3=south-relative-to-east)
   
   // Dimensions
   DATA_INTEGER(n_i);         // Number of observations (stacked across all years)
@@ -200,6 +201,7 @@ Type objective_function<Type>::operator() ()
   array<Type> catchpred_rt(n_r,n_t);
   catchpred_rt.setZero();
   array<Type> u_rt(n_r,n_t);
+  array<Type> debug_rt(n_r,n_t);
   array<Type> OFL_rt(n_r,n_t);
   array<Type> upred_rt(n_r,n_t); 
   // Track estimates and predictions of effort (dimensions n_gmrf x n_t, i.e., padded with zeros)
@@ -251,6 +253,7 @@ Type objective_function<Type>::operator() ()
     for(int tdev=0; tdev<n_tdiv; tdev++){
       upred_rt.col(t) = Mdiv_sparse * upred_rt.col(t).matrix();
     }
+    debug_rt.col(t) = upred_rt.col(t);
     // Density-dependent function
     for(int r=0; r<n_r; r++){
       if(Options_vec(1)==0) ln_uhat_gt(r,t) = log( upred_rt(r,t) * exp(alpha + Omega_g(r) - beta*log( upred_rt(r,t)/km2_r(r) )) );
@@ -353,6 +356,8 @@ Type objective_function<Type>::operator() ()
   REPORT( alpha );
   REPORT( beta );
   REPORT( pos_penalty );  
+  REPORT( effortdens_rt );
+  REPORT( debug_rt );
   
   // Movement stuff
   REPORT( M_sparse );
