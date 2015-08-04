@@ -66,7 +66,7 @@ SpatProdSimulator_Fn = function( MoveMat, SD_omega=1, SD_epsilon=1, SD_effort=1,
   catch_t = colSums( catch_rt )
 
   # Return stuff
-  SettingsList = list( MoveMat=MoveMat, SD_omega=SD_omega, SD_epsilon=SD_epsilon, SD_effort=SD_effort, CV_obs=CV_obs, effort_par=effort_par, sizepar=sizepar, Scale=Scale, Dynamical_Model=Dynamical_Model, n_s=n_s, n_t=n_t, r_s=r_s, n_r=n_r, loc_r=loc_r, logmeanu0=logmeanu0, alpha=alpha, beta=beta, km2_r=km2_r )
+  SettingsList = list( MoveMat=MoveMat, SD_omega=SD_omega, SD_epsilon=SD_epsilon, SD_effort=SD_effort, CV_obs=CV_obs, effort_par=effort_par, sizepar=sizepar, Range=Range, Dynamical_Model=Dynamical_Model, n_s=n_s, n_t=n_t, r_s=r_s, n_r=n_r, loc_r=loc_r, logmeanu0=logmeanu0, alpha=alpha, beta=beta, km2_r=km2_r )
   Return = list("SettingsList"=SettingsList, "DF"=DF, "catch_t"=catch_t, "catch_rt"=catch_rt, "effortdens_t"=effortdens_t, "effortdens_rt"=effortdens_rt, "MoveMat"=MoveMat, "upred_rt"=upred_rt, "u_rt"=u_rt, "Epsilon_rt"=Epsilon_rt, "Omega_r"=Omega_r, "debug_rt"=debug_rt)
   return( Return )
 }
