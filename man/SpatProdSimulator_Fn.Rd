@@ -33,8 +33,8 @@ SpatProdSimulator_Fn(MoveMat, SD_omega = 1, SD_epsilon = 1, SD_effort = 1, CV_ob
   \item{sizepar}{
 %%     ~~Describe \code{sizepar} here~~
 }
-  \item{Scale}{
-%%     ~~Describe \code{Scale} here~~
+  \item{Range}{
+The distance at which correlation drops to 10 percent
 }
   \item{Dynamical_Model}{
 %%     ~~Describe \code{Dynamical_Model} here~~

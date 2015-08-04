@@ -1,13 +1,15 @@
 
 #  MoveMat, SD_omega=1, SD_epsilon=1, SD_effort=1, effort_par=c(0.2,0.5), sizepar=c(1,0.5), Scale, Dynamical_Model, n_s, n_t, r_s, n_r, loc_r, alpha, beta, km2_r 
-SpatProdSimulator_Fn = function( MoveMat, SD_omega=1, SD_epsilon=1, SD_effort=1, CV_obs=1, effort_par=c(0.2,0.5), sizepar=c(1,0.5), Scale, Dynamical_Model, n_s, n_t, r_s, n_r, nsamples_per_year, loc_r, logmeanu0, alpha, beta, km2_r ){
+SpatProdSimulator_Fn = function( MoveMat, SD_omega=1, SD_epsilon=1, SD_effort=1, CV_obs=1, effort_par=c(0.2,0.5), sizepar=c(1,0.5), Range, Dynamical_Model, n_s, n_t, r_s, n_r, nsamples_per_year, loc_r, logmeanu0, alpha, beta, km2_r ){
   # Load library
   require( RandomFields )
 
   # Simulate
-  RF_omega = RMgauss(var=SD_omega^2, scale=Scale)
-  RF_epsilon = RMgauss(var=SD_epsilon^2, scale=Scale)
-  RF_effort = RMgauss(var=SD_effort^2, scale=Scale)
+  # Range: Distance at which correlation drops to approx. 10%
+  # Range = 2*Scale
+  RF_omega = RMmatern(var=SD_omega^2, nu=1, scale=Range/2)
+  RF_epsilon = RMmatern(var=SD_epsilon^2, nu=1, scale=Range/2)
+  RF_effort = RMmatern(var=SD_effort^2, nu=1, scale=Range/2)
 
   # Simulate effort
   effortdens_t = rlnorm( n_t, meanlog=log(effort_par[1])-effort_par[2]^2/2, sdlog=effort_par[2] )
