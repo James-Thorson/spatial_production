@@ -158,7 +158,10 @@ Type objective_function<Type>::operator() ()
   Type kappa_pow4 = kappa_pow2*kappa_pow2;
   Type tauU = 1 / sqrt(4*pi*exp(2*logSigmaU)*exp(2*logkappa));
   Type tauO = 1 / sqrt(4*pi*exp(2*logSigmaO)*exp(2*logkappa));
+  Type log_tauU = log(tauU);
+  Type log_tauO = log(tauO);
   Type Range_raw = sqrt(8) / exp( logkappa );
+  Type log_Range_raw = log(Range_raw);
   vector<Type> F_t(n_t);
   F_t = exp( ln_F_t );
   vector<Type> mvec(4);
@@ -345,6 +348,7 @@ Type objective_function<Type>::operator() ()
   REPORT( NLL_i );
   REPORT( Omega_g );
   REPORT( Range_raw );
+  REPORT( log_Range_raw )
   REPORT( SigmaU );
   REPORT( SigmaO );
   REPORT( tauU );
@@ -380,7 +384,16 @@ Type objective_function<Type>::operator() ()
   ADREPORT( beta );
   ADREPORT( mvec );
   ADREPORT( ln_OFL_t );
-  ADREPORT( ln_u_t );  
+  ADREPORT( OFL_t );
+  ADREPORT( ln_u_t );
+  ADREPORT( Range_raw );
+  ADREPORT( log_Range_raw )
+  ADREPORT( tauU );
+  ADREPORT( tauO );
+  ADREPORT( log_tauU );
+  ADREPORT( log_tauO );
+  ADREPORT( SigmaU );
+  ADREPORT( SigmaO );
 
   return NLL;
 }
